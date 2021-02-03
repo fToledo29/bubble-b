@@ -4,7 +4,7 @@ import './bubbleB.css';
 import { Component } from 'react';
 import Bubble from './bubble/bubble';
 
-class BubbleBounce extends Component {
+class BubbleB extends Component {
 
 	constructor(props) {
 		super(props);
@@ -141,4 +141,4 @@ class BubbleBounce extends Component {
 	}
 }
 
-export default BubbleBounce;
+export default BubbleB;

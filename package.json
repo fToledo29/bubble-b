@@ -1,6 +1,6 @@
 {
 	"name": "bubble-b",
-	"version": "0.0.3",
+	"version": "0.0.5",
 	"description": "This library creates colorful dynamic bubles in the background of a web app",
 	"main": "./lib/bubbleB.js",
 	"license": "MIT",
@@ -31,6 +31,6 @@
 	"dependencies": {},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/azuerbot/npmLibraryTest.git"
+		"url": "https://github.com/fToledo29/bubble-b.git"
 	}
 }
