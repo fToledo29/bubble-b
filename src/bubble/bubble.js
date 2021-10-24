@@ -11,11 +11,14 @@ const Bubble = ({ configuration, delayedTime, random }) => {
                 top,
                 left,
                 cssAnimation,
-                alternate } = configuration;
+                alternate, 
+		backgroundColor } = configuration;
 
 	const animationDirection = alternate === 1 ? 'alternate-reverse' : 'alternate';
 
 	const WebkitAnimationDirection = alternate === 1 ? 'alternate-reverse' : 'alternate';
+
+	
 
         useEffect(() => {
                 const timeout = setTimeout(() => setDelayed(false), delayedTime);
@@ -28,13 +31,12 @@ const Bubble = ({ configuration, delayedTime, random }) => {
                 style={
                         {
                                 borderRadius: '50%',
-                                backgroundColor: `#${random(100000, 999999)}`,
+                                backgroundColor: backgroundColor,
                                 height: height,
                                 width: width,
                                 top: `${top}%`,
                                 left: `${left}%`,
                                 position: 'fixed',
-                                opacity: 0.5,
 				animationName: cssAnimation.animationName,
 				animationDuration: cssAnimation.animationDuration,
 				animationTimingFunction: cssAnimation.animationTimingFunction,
