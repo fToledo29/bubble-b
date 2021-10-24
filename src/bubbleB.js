@@ -13,17 +13,43 @@ class BubbleB extends Component {
 
 		this.cssframeArr = [];
 
-		this.setBubbleCSSFram();
+		this.stylesConfig = [];
+
+		this.random = this.random.bind(this);
 
 		this.setBubbleCSSFram = this.setBubbleCSSFram.bind(this);
+
+		this.getCSSFrame = this.getCSSFrame.bind(this);
+
+		this.setBubbleCSSFram();
 
 	}
 
 	random(max, min) {
 		return Math.floor(Math.random() * (max - min + 1) + min);
 	}
+
+	setupStylesConfig(index) {
+		const height = (this.random(100, 1100) / 4);
+		const alternate = this.random(1, 2);
+		const animation = this.getCSSFrame(alternate, index + 1);
+		return {
+			backgroundColor: `#${this.random(100000, 999999)}`,
+			top: this.random(1, 100),
+			left: this.random(1, 100),
+			animationClass: 'bubble-' + this.random(1, 10),
+			delay: index < 5 ? this.random(100, 1) : this.random(25000, 100),
+			alternate: alternate,
+			cssAnimation: animation,
+			width: height,
+			height,
+			index
+		};
+	}
 	
 	setBubbleCSSFram() {
+
+		this.stylesConfig = [];
 
 		this.isSupported = Keyframes.isSupported();
 
@@ -34,28 +60,28 @@ class BubbleB extends Component {
 			let bubbleCSSFrame = '';
 
 			for (let i = 0; i < this.cssframeArr.length; i++) {
-				
+				console.log('Random left percentage: ', this.random(0, 99));
 				bubbleCSSFrame = (i % 2 === 0 ) ? Keyframes.defineCSS([{
 					name: `move-bubble-${(i + 1)}`,
 					'0%':   {
 						opacity: 0,
 					},
-					'30%':  {
+					'20%':  {
 						opacity: 0.5,
 						top: `0%`, 
-						left: `${this.random(0, 99)}%`,
+						left: `${this.random(-5, 100)}%`,
 					},
-					'50%':  {
+					'40%':  {
 						top: `100%`, 
-						left: `${this.random(0, 99)}%`,
+						left: `${this.random(-5, 100)}%`,
 					},
-					'70%':  {
+					'60%':  {
 						top: `0%`, 
-						left: `${this.random(0, 99)}%`,
+						left: `${this.random(-5, 100)}%`,
 					},
-					'90%':  {
+					'80%':  {
 						top: `100%`,
-						left: `${this.random(0, 99)}%`,
+						left: `${this.random(-5, 100)}%`,
 					},
 					'100%': {
 						opacity: 0,
@@ -65,22 +91,22 @@ class BubbleB extends Component {
 					'100%':   {
 						opacity: 0,
 					},
-					'90%':  {
+					'80%':  {
 						opacity: 0.5,
 						top: `0%`, 
-						left: `${this.random(0, 99)}%`,
+						left: `${this.random(-5, 100)}%`,
 					},
-					'70%':  {
+					'60%':  {
 						top: `100%`, 
-						left: `${this.random(0, 99)}%`,
+						left: `${this.random(-5, 100)}%`,
 					},
-					'50%':  {
+					'40%':  {
 						top: `0%`, 
-						left: `${this.random(0, 99)}%`,
+						left: `${this.random(-5, 100)}%`,
 					},
-					'30%':  {
+					'20%':  {
 						top: `100%`,
-						left: `${this.random(0, 99)}%`,
+						left: `${this.random(-5, 100)}%`,
 					},
 					'0%': {
 						opacity: 0,
@@ -88,7 +114,10 @@ class BubbleB extends Component {
 				}]) ;
 				
 				this.cssframeArr[i] = bubbleCSSFrame;
+				this.stylesConfig.push(this.setupStylesConfig(i));
 			}
+
+			return this.cssframeArr;
 
 		}
 	
@@ -98,35 +127,23 @@ class BubbleB extends Component {
 
 		return {
 			animationName: `move-bubble-${animationNum}`,
-			animationDuration: `${this.random(90, 60)}s`,
+			animationDuration: `${this.random(200, 90)}s`,
 			animationTimingFunction: 'ease-out',
-			animationDelay: '0s',
+			animationDelay: `${this.random(0, 30)}s`,
 			animationIterationCount: 'infinite',
 			animationDirection: alternate === 1 ? 'alternate-reverse' : 'alternate',
 		};
 	}
 
 	render() {
+		
 		return (
 			<div>
 				<style>
 					{this.cssframeArr.map((x) => x)}
 				</style>
 
-				{this.isSupported ? this.cssframeArr.map((bubble, index) => {
-					const height = (this.random(100, 1100) / 4);
-					const alternate = this.random(1, 2);
-					const configuration = {
-						top: this.random(1, 100),
-						left: this.random(1, 100),
-						animationClass: 'bubble-' + this.random(1, 10),
-						delay: index < 5 ? this.random(100, 1) : this.random(25000, 100),
-						alternate,
-						cssAnimation: this.getCSSFrame(alternate, index + 1),
-						width: height,
-						height,
-						index
-					}
+				{this.isSupported ? this.stylesConfig.map((configuration, index) => {
 
 					return  <Bubble
 					key={index} 

@@ -1,3 +1,7 @@
 .bubble {
       filter: brightness(300%);
 }
+
+.bubble {
+	opacity: 0;
+}
