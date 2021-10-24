@@ -96,15 +96,14 @@ class BubbleB extends Component {
 
 	getCSSFrame(alternate, animationNum) {
 
-		return Keyframes.playCSS({
-			name: `move-bubble-${animationNum}`,
-			duration: `${this.random(90, 60)}s`,
-			timingFunction: 'ease-out',
-			delay: '0s',
-			iterationCount: 'infinite',
-			direction: alternate === 1 ? 'alternate-reverse' : 'alternate',
-		});
-
+		return {
+			animationName: `move-bubble-${animationNum}`,
+			animationDuration: `${this.random(90, 60)}s`,
+			animationTimingFunction: 'ease-out',
+			animationDelay: '0s',
+			animationIterationCount: 'infinite',
+			animationDirection: alternate === 1 ? 'alternate-reverse' : 'alternate',
+		};
 	}
 
 	render() {

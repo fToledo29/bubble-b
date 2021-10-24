@@ -13,6 +13,9 @@ const Bubble = ({ configuration, delayedTime, random }) => {
                 cssAnimation,
                 alternate } = configuration;
 
+	const animationDirection = alternate === 1 ? 'alternate-reverse' : 'alternate';
+
+	const WebkitAnimationDirection = alternate === 1 ? 'alternate-reverse' : 'alternate';
 
         useEffect(() => {
                 const timeout = setTimeout(() => setDelayed(false), delayedTime);
@@ -32,9 +35,13 @@ const Bubble = ({ configuration, delayedTime, random }) => {
                                 left: `${left}%`,
                                 position: 'fixed',
                                 opacity: 0.5,
-                                animation: cssAnimation,
-                                animationDirection: alternate === 1 ? 'alternate-reverse' : 'alternate',
-                                WebkitAnimationDirection: alternate === 1 ? 'alternate-reverse' : 'alternate',
+				animationName: cssAnimation.animationName,
+				animationDuration: cssAnimation.animationDuration,
+				animationTimingFunction: cssAnimation.animationTimingFunction,
+				animationDelay: cssAnimation.animationDelay,
+				animationIterationCount: cssAnimation.animationIterationCount,
+                                animationDirection: animationDirection,
+                                WebkitAnimationDirection: WebkitAnimationDirection,
                         }} ></div>;
 };
 
