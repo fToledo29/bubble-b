@@ -39,6 +39,6 @@
 		"url": "https://github.com/fToledo29/bubble-b.git"
 	},
 	"publishConfig": {
-		"registry":"https://npm.pkg.github.com"
+		"@fToledo29:registry": "https://npm.pkg.github.com"
 	}
 }
