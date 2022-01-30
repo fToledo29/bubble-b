@@ -1,6 +1,6 @@
 {
 	"name": "bubble-b",
-	"version": "0.0.10",
+	"version": "0.0.11",
 	"description": "This library creates colorful dynamic bubles that bounce all over the background of you webapp",
 	"main": "./lib/bubbleB.js",
 	"license": "MIT",
@@ -39,6 +39,6 @@
 		"url": "https://github.com/fToledo29/bubble-b.git"
 	},
 	"publishConfig": {
-		"@fernandotoledo23:registry": "https://npm.pkg.github.com"
+		"@ftoledo29:registry": "https://npm.pkg.github.com"
 	}
 }
