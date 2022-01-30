@@ -1,6 +1,6 @@
 {
-	"name": "bubble-b",
-	"version": "0.0.11",
+	"name": "@ftoledo29/bubble-b",
+	"version": "0.0.14",
 	"description": "This library creates colorful dynamic bubles that bounce all over the background of you webapp",
 	"main": "./lib/bubbleB.js",
 	"license": "MIT",

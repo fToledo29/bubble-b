@@ -32,4 +32,4 @@ import BobbleB from 'bubble-b';
 
 ```
 
-<img src="./example/bubblebExample2.gif">
+<img src="https://github.com/fToledo29/bubble-b/blob/main/example/bubblebExample2.gif">
