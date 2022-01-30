@@ -60,7 +60,7 @@ class BubbleB extends Component {
 			let bubbleCSSFrame = '';
 
 			for (let i = 0; i < this.cssframeArr.length; i++) {
-				console.log('Random left percentage: ', this.random(0, 99));
+
 				bubbleCSSFrame = (i % 2 === 0 ) ? Keyframes.defineCSS([{
 					name: `move-bubble-${(i + 1)}`,
 					'0%':   {
