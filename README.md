@@ -25,7 +25,7 @@ npm install bubble-b
 ### Example:
 
 ```jsx
-import BobbleB from 'bubble-b';
+import BubbleB from 'bubble-b';
 
 
 <BubbleB bubblesNum={30} />
