@@ -1,37 +1,71 @@
-name: Node.js Package
+name: Verify and publish
 
+# Pull requests, and pushes to main/dev/release: build the library and fail if the
+# committed lib/ (the package `main`) is not what a fresh build produces.
+# A GitHub release being published (directly, or from a saved draft): the same
+# verification, then publish to GitHub Packages. Nothing else ever publishes.
 on:
+  pull_request:
   push:
-    branches:
-      - main
-      - release
+    branches: [main, dev, release]
   release:
-    types: [created]
+    types: [published]
+
+permissions:
+  contents: read
+
+# A newer run on the same ref cancels the older one. Release runs get their own
+# group and are never cancelled, so a publish cannot be interrupted half-way.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name != 'release' }}
 
 jobs:
-  build:
+  verify:
+    name: Build and check committed lib/
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
-          node-version: 12
+          node-version: '22'
+          cache: npm
       - run: npm ci
-      - run: npm test
+      - name: Build
+        run: npm run build
+        env:
+          # webpack 4 hashes with MD4, which OpenSSL 3 (Node 17+) rejects without this.
+          NODE_OPTIONS: --openssl-legacy-provider
+      # Fix a failure here by running the build locally with the same NODE_OPTIONS
+      # and committing lib/. `--intent-to-add` makes new, untracked build output
+      # show up in the diff too; a plain `git diff` would silently ignore it.
+      - name: Fail if committed lib/ differs from the fresh build
+        run: |
+          git add --intent-to-add -- lib
+          git diff --exit-code -- lib
 
-  publish-gpr:
-    needs: build
+  publish:
+    name: Publish to GitHub Packages
+    # Triggers are workflow-wide, so this job must opt in to the release event itself.
+    if: github.event_name == 'release'
+    needs: verify
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     permissions:
-      packages: write
       contents: read
+      packages: write
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      # Pinned to commit SHAs: this is the only job holding a write token.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          node-version: 12
+          node-version: '22'
           registry-url: https://npm.pkg.github.com/
-      - run: npm ci
+      # No `npm ci` here: lib/ is committed, package.json has no prepack/prepublish
+      # script, and `verify` already proved lib/ matches the build. If a script that
+      # builds on publish is ever added, `npm ci` must come back with NODE_AUTH_TOKEN
+      # set on it too (setup-node v7 no longer exports a placeholder token).
       - run: npm publish
         env:
-          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
