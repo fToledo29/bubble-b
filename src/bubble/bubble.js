@@ -1,50 +1,36 @@
 import React, { useEffect, useState } from 'react';
 
-const Bubble = ({ configuration, delayedTime, random }) => {
+const Bubble = ({ animationName, backgroundColor, top, left, size, durationSeconds, direction, mountDelayMs }) => {
 
-	const [delayed, setDelayed] = useState(true);
-
-	const { animationClass,
-		index,
-		height,
-		width,
-		top,
-		left,
-		cssAnimation,
-		alternate,
-		backgroundColor } = configuration;
-
-	const animationDirection = alternate === 1 ? 'alternate-reverse' : 'alternate';
-
-	const WebkitAnimationDirection = alternate === 1 ? 'alternate-reverse' : 'alternate';
-
-
+	const [mounted, setMounted] = useState(mountDelayMs === 0);
 
 	useEffect(() => {
-		const timeout = setTimeout(() => setDelayed(false), delayedTime);
+		if (mountDelayMs === 0) return undefined;
+		const timeout = setTimeout(() => setMounted(true), mountDelayMs);
 		return () => clearTimeout(timeout);
-	}, [setDelayed, delayedTime]);
+	}, [mountDelayMs]);
 
-	return delayed ? null : <div
-		className={`${animationClass} bubble`}
-		key={index}
-		style={
-			{
-				borderRadius: '50%',
-				backgroundColor: backgroundColor,
-				height: height,
-				width: width,
-				top: `${top}%`,
-				left: `${left}%`,
-				position: 'fixed',
-				animationName: cssAnimation.animationName,
-				animationDuration: cssAnimation.animationDuration,
-				animationTimingFunction: cssAnimation.animationTimingFunction,
-				animationDelay: cssAnimation.animationDelay,
-				animationIterationCount: cssAnimation.animationIterationCount,
-				animationDirection: animationDirection,
-				WebkitAnimationDirection: WebkitAnimationDirection,
-			}} ></div>;
+	if (!mounted) return null;
+
+	return <div
+		className="bubble-b__bubble"
+		style={{
+			position: 'absolute',
+			top: `${top}%`,
+			left: `${left}%`,
+			width: size,
+			height: size,
+			borderRadius: '50%',
+			backgroundColor,
+			// Hidden until the animation's first frame runs; the keyframes own opacity after that.
+			opacity: 0,
+			filter: 'brightness(300%)',
+			animationName,
+			animationDuration: `${durationSeconds}s`,
+			animationTimingFunction: 'ease-out',
+			animationIterationCount: 'infinite',
+			animationDirection: direction,
+		}} />;
 };
 
 export default Bubble;
